@@ -4,7 +4,6 @@ import hakanozdabak.productData.business.abstracts.ProductService;
 import hakanozdabak.productData.business.requests.CreateProductRequest;
 import hakanozdabak.productData.business.requests.UpdateProductRequest;
 import hakanozdabak.productData.business.responses.GetAllProductsResponse;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,23 +16,23 @@ import java.util.List;
 public class ProductsController {
     private ProductService productService;
 
-    @GetMapping()
+    @GetMapping("/getall")
     public List<GetAllProductsResponse> getAll(){
         return productService.getAll();
 
     }
-    @PostMapping()
+    @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void add(CreateProductRequest createProductRequest){
         this.productService.add(createProductRequest);
     }
-    @PutMapping
+    @PutMapping("/update")
     @ResponseStatus(code = HttpStatus.OK)
     public void update(UpdateProductRequest updateProductRequest){
         this.productService.update(updateProductRequest);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public void delete(int id){
         this.productService.delete(id);
