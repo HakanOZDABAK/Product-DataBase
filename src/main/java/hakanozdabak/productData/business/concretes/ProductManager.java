@@ -4,13 +4,16 @@ import hakanozdabak.productData.business.abstracts.ProductService;
 import hakanozdabak.productData.business.requests.CreateProductRequest;
 import hakanozdabak.productData.business.requests.UpdateProductRequest;
 import hakanozdabak.productData.business.responses.GetAllProductsResponse;
+import hakanozdabak.productData.business.responses.GetByCategoryProductsResponse;
+import hakanozdabak.productData.business.rules.ProductBusinessRules;
 import hakanozdabak.productData.dataAccess.abstracts.ProductRepository;
 import hakanozdabak.productData.entities.concretes.Product;
-import hakanozdabak.productData.utilities.mappers.ModelMapperService;
+import hakanozdabak.productData.core.utilities.mappers.ModelMapperService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class ProductManager implements ProductService {
 
     private ProductRepository productRepository;
+    private ProductBusinessRules productBusinessRules;
     private ModelMapperService modelMapperService;
     @Override
     public List<GetAllProductsResponse> getAll() {
@@ -29,6 +33,7 @@ public class ProductManager implements ProductService {
 
     @Override
     public void add(CreateProductRequest createProductRequest) {
+        this.productBusinessRules.checkIfProductNameExists(createProductRequest.getName());
         Product product = this.modelMapperService.forRequest().map(createProductRequest,Product.class);
         this.productRepository.save(product);
     }
@@ -43,4 +48,20 @@ public class ProductManager implements ProductService {
     public void delete(int id) {
         this.productRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Product> getById(int id) {
+        Optional<Product> product = this.productRepository.findById(id);
+        return product;
+    }
+
+    @Override
+    public List<GetByCategoryProductsResponse> getByCategory(String category) {
+        List<Product> products = this.productRepository.findByCategory(category);
+        List<GetByCategoryProductsResponse> categoryProductsResponses= products.stream()
+                .map(product -> this.modelMapperService.forResponse().map(product,GetByCategoryProductsResponse.class)).collect(Collectors.toList());
+        return categoryProductsResponses;
+    }
+
+
 }

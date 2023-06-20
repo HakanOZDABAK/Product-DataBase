@@ -1,4 +1,4 @@
-package hakanozdabak.productData.utilities.mappers;
+package hakanozdabak.productData.core.utilities.mappers;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
