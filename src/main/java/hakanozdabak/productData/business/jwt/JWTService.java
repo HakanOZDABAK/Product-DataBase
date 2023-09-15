@@ -15,23 +15,23 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    private static final String SECRET_KEY = "YOUR SECRET_KEY";
+    private static final String SECRET_KEY = "36e8121d3399369ca8b288a138b7bde78e4ebe1bd67235da99584c5bd103769c";
     public String extractUserName(String token) {
     return extractClaim(token,Claims::getSubject);
     }
 
-    public String generateToken(UserDetails userDetails){
-        return  generateToken(new HashMap<>(),userDetails);
+    public String generateToken(String email){
+        return  generateToken(new HashMap<>(),email);
     }
     public String generateToken(Map<String, Object> extraClaims,
-                                UserDetails userDetails){
+                                String email){
 
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*2))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

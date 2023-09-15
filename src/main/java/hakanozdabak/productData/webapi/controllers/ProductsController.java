@@ -8,10 +8,10 @@ import hakanozdabak.productData.business.responses.GetByCategoryProductsResponse
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -31,21 +31,21 @@ public class ProductsController {
 
     }
     @PutMapping("/update")
-    public void update(UpdateProductRequest updateProductRequest){
+    public void update(@RequestBody UpdateProductRequest updateProductRequest){
         ResponseEntity.ok();
         this.productService.update(updateProductRequest);
     }
 
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id){
-        ResponseEntity.ok();
         this.productService.delete(id);
+
     }
 
     @GetMapping("/{category}")
-    public List<GetByCategoryProductsResponse> getByCategory(@PathVariable String category){
-        ResponseEntity.ok();
-        return productService.getByCategory(category);
+    public ResponseEntity<List<GetByCategoryProductsResponse>> getByCategory(@PathVariable String category){
+
+        return ResponseEntity.ok(productService.getByCategory(category));
     }
 
 }
