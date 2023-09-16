@@ -75,7 +75,7 @@ public class ProductDataApplication {
 				 .password("admin")
 				 .role(Role.ADMIN)
 				 .build();
-		 System.out.println("Admin Token: " + authenticationService.register(admin).getAccessToken());
+		 System.out.println("Admin Token: " + authenticationService.register(admin).getToken());
 
 	 };
 
