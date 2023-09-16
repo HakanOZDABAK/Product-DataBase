@@ -1,8 +1,11 @@
 package hakanozdabak.productData;
 
+import hakanozdabak.productData.business.jwt.AuthenticationService;
+import hakanozdabak.productData.business.requests.RegisterRequest;
 import hakanozdabak.productData.core.utilities.exceptions.BusinessException;
 import hakanozdabak.productData.core.utilities.exceptions.ProblemDetails;
 import hakanozdabak.productData.core.utilities.exceptions.ValidationProblemDetails;
+import hakanozdabak.productData.entities.concretes.Role;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -12,6 +15,7 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -60,4 +64,20 @@ public class ProductDataApplication {
 		return new ModelMapper();
 	}
 
+	@Bean
+	public CommandLineRunner commandLineRunner(AuthenticationService authenticationService)
+	{
+     return args -> {
+		 var admin = RegisterRequest.builder()
+				 .firstName("Admin")
+				 .lastName("Admin")
+				 .email("admin@mail.com")
+				 .password("admin")
+				 .role(Role.ADMIN)
+				 .build();
+		 System.out.println("Admin Token: " + authenticationService.register(admin).getAccessToken());
+
+	 };
+
+	}
 }
