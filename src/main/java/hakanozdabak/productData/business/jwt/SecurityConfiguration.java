@@ -31,6 +31,8 @@ public class SecurityConfiguration {
             "/configuration/ui",
             "/configuration/security",
             "/webjars/**",
+            "/swagger/index.html",
+            "/swagger/**",
 
             // for Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**",

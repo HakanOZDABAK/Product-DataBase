@@ -8,6 +8,7 @@ import hakanozdabak.productData.business.requests.RefreshTokenRequest;
 import hakanozdabak.productData.business.requests.RegisterRequest;
 import hakanozdabak.productData.business.responses.AuthenticationResponse;
 import hakanozdabak.productData.entities.concretes.RefreshToken;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
