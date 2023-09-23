@@ -10,7 +10,10 @@ import hakanozdabak.productData.dataAccess.abstracts.ProductRepository;
 import hakanozdabak.productData.entities.concretes.Product;
 import hakanozdabak.productData.core.utilities.mappers.ModelMapperService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +26,10 @@ public class ProductManager implements ProductService {
     private ProductRepository productRepository;
     private ProductBusinessRules productBusinessRules;
     private ModelMapperService modelMapperService;
+
+
     @Override
+    @Transactional(readOnly = true)
     public List<GetAllProductsResponse> getAll() {
         List<Product> products = productRepository.findAll();
         List<GetAllProductsResponse> productsResponse= products.stream()
@@ -49,12 +55,13 @@ public class ProductManager implements ProductService {
         this.productRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<Product> getById(int id) {
         Optional<Product> product = this.productRepository.findById(id);
         return product;
     }
-
+    @Transactional(readOnly = true)
     @Override
     public List<GetByCategoryProductsResponse> getByCategory(String category) {
         List<Product> products = this.productRepository.findByCategory(category);
