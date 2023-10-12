@@ -3,22 +3,21 @@ package hakanozdabak.productData.service;
 import hakanozdabak.productData.business.concretes.ProductManager;
 import hakanozdabak.productData.business.requests.UpdateProductRequest;
 import hakanozdabak.productData.business.responses.GetAllProductsResponse;
+import hakanozdabak.productData.business.responses.GetByCategoryProductsResponse;
 import hakanozdabak.productData.business.rules.ProductBusinessRules;
 import hakanozdabak.productData.core.utilities.mappers.ModelMapperManager;
-import hakanozdabak.productData.core.utilities.mappers.ModelMapperService;
 import hakanozdabak.productData.dataAccess.abstracts.ProductRepository;
 import hakanozdabak.productData.entities.concretes.Product;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -57,8 +56,8 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("Should Update By If")
-    void shouldUpdateById() {
+    @DisplayName("Should Get By Category")
+    void shouldGetByCategory() {
         Product product = Product.builder()
                 .name("Milk")
                 .category("Drink")
@@ -66,12 +65,41 @@ public class ProductManagerTest {
                 .quantity(10)
                 .onOffer(true)
                 .build();
-
-        when(productRepository.findById(0)).thenReturn(Optional.ofNullable(product));
-        Optional<Product> expectedProduct = productManager.getById(0);
-        assertThat(expectedProduct.get().getName()).isEqualTo(product.getName());
-
+        when(productRepository.findByCategory(Mockito.any(String.class))).thenReturn(List.of(product));
+        List<GetByCategoryProductsResponse> getByCategoryProductsResponsesLists = productManager.getByCategory(product.getCategory());
+assertThat(getByCategoryProductsResponsesLists).isNotNull();
+assertThat(getByCategoryProductsResponsesLists.size()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("Should Update")
+    void shouldUpdate() {
+        Product product = Product.builder()
+                .id(0)
+                .name("Milk")
+                .category("Drink")
+                .price(10)
+                .quantity(10)
+                .onOffer(true)
+                .build();
+        UpdateProductRequest updateProductRequest = UpdateProductRequest.builder()
+                .id(0)
+                .name("Coke")
+                .category("Drink")
+                .price(10)
+                .quantity(10)
+                .onOffer(true)
+                .build();
+
+        when(modelMapperManager.forRequest()).thenReturn(modelMapper);
+        when(productRepository.save(Mockito.any(Product.class))).thenReturn(product);
+        productRepository.save(product);
+        UpdateProductRequest updateProductRequest1 = productManager.update(updateProductRequest);
+        assertThat(updateProductRequest1).isNotNull();
+        assertThat(updateProductRequest1.getName()).isEqualTo("Coke");
+    }
+
+
 
 
 }
