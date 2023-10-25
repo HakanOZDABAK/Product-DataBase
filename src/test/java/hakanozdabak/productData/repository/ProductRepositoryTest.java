@@ -3,6 +3,7 @@ package hakanozdabak.productData.repository;
 import hakanozdabak.productData.business.jwt.AuthenticationService;
 import hakanozdabak.productData.business.requests.AuthenticationRequest;
 import hakanozdabak.productData.business.requests.RegisterRequest;
+import hakanozdabak.productData.dataAccess.abstracts.ProductRepository;
 import hakanozdabak.productData.entities.concretes.Product;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
